@@ -1,0 +1,11 @@
+{
+  "name": "postman-ci",
+  "version": "0.0.1",
+  "description": "Tools to integrate postman and newman into an continous integration workflow",
+  "author": "Jan Lingemann (mail@janlingemann.de)",
+  "license": "MIT",
+  "dependencies": {
+    "newman": "^2.1.2",
+    "request": "^2.72.0"
+  }
+}
