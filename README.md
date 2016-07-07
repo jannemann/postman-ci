@@ -9,7 +9,8 @@ export apikey="00000000000000000000000000000000"
 
 ./listIDs.js
 
-export $collectionID="00000-00000000-0000-0000-0000-000000000000"
-export $environmentID="00000000-0000-0000-0000-000000000000"
+export collectionID="00000-00000000-0000-0000-0000-000000000000"
+
+export environmentID="00000000-0000-0000-0000-000000000000"
 
 ./runTestWithIDs.js $collectionID $environmentID
