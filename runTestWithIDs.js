@@ -2,12 +2,23 @@
 'use strict';
 var Request = require('request');
 var Newman = require('newman');
+var Fs = require('fs');
 
 var apiKey = process.env.apiKey;
 var host = 'api.getpostman.com';
 
 var collectionID = process.argv[2];
 var environmentID = process.argv[3];
+
+var tempDir = './temp';
+var resultsDir = './results';
+
+if (!Fs.existsSync(tempDir)){
+    Fs.mkdirSync(tempDir);
+}
+if (!Fs.existsSync(resultsDir)){
+    Fs.mkdirSync(resultsDir);
+}
 
 var options = {
   baseUrl: 'https://' + host,
@@ -59,7 +70,7 @@ function test(collection, environment) {
     delay: 100, //Specify a delay (in ms) between requests
     requestTimeout: 5000, //Specify a request timeout (in ms) for a request (Defaults to 15000 if not set)
     iterationCount: 1, // define the number of times the runner should run
-    testReportFile: 'results/' + collection.info.name + '_test.xml', // the file to export to
+    testReportFile: resultsDir + '/' + collection.info.name + '_test.xml', // the file to export to
     responseHandler: "TestResponseHandler", // the response handler to use
     insecure: false, //Disable strict ssl
     asLibrary: true, // this makes sure the exit code is returned as an argument to the callback function
@@ -69,7 +80,7 @@ function test(collection, environment) {
     //noColor: false, //Disable colored output
     //noTestSymbols: false, //Disable symbols in test output and use PASS|FAIL instead
     //pretty: true, //(Use with -i) Enable pretty-print while saving imported collections, environments, and globals
-    outputFileVerbose: 'temp/' +'newman.log'
+    outputFileVerbose: tempDir + '/' +'newman.log'
   }
 
   // Optional Callback function which will be executed once Newman is done executing all its tasks.
