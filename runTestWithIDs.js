@@ -84,9 +84,10 @@ function test(collection, environment) {
   }
 
   // Optional Callback function which will be executed once Newman is done executing all its tasks.
-  Newman.execute(collection, newmanOptions, quit());
+  Newman.execute(collection, newmanOptions, newman_finished_callback);
 }
 
-function quit() {
-  console.log('quited');
+function newman_finished_callback(exitCode) {
+  console.log('Newman finished with code '+exitCode);
+  process.exit(exitCode)
 }
