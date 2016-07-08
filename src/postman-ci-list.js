@@ -3,7 +3,7 @@
 
 var Request = require('request');
 
-var apiKey = process.env.apiKey;
+var apiKey = process.env.POSTMAN_API_KEY;
 var host = 'api.getpostman.com';
 
 var options = {

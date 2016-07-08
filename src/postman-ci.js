@@ -18,7 +18,7 @@ function parseArguments() {
 }
 
 function main() {
-  if (process.env.apiKey) {
+  if (process.env.POSTMAN_API_KEY) {
     parseArguments();
   } else {
     globalsInstances.printHelp();

@@ -9,7 +9,7 @@ var program = require('commander');
 var globals = require('./globals');
 var globalsInstances = new globals();
 
-var apiKey = process.env.apiKey;
+var apiKey = process.env.POSTMAN_API_KEY;
 var host = 'api.getpostman.com';
 
 var tempDir = './temp';
