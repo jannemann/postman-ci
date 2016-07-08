@@ -8,7 +8,7 @@ npm install -g postman-ci
 
 ## Run (in bash)
 
-export apikey="00000000000000000000000000000000"
+export POSTMAN_API_KEY="00000000000000000000000000000000"
 
 postman-ci list
 

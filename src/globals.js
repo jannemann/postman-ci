@@ -8,7 +8,7 @@ function globals() {
     console.log('');
     console.log('  Examples:');
     console.log('');
-    console.log('    export apiKey=00000000000000000000000000000000');
+    console.log('    export POSTMAN_API_KEY=00000000000000000000000000000000');
     console.log('    postman-ci list');
     console.log('    postman-ci test -c POSTMAN_COLLECTION_UID -e POSTMAN_ENVIRONMENT_ID');
     console.log('');
