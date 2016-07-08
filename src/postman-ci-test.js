@@ -1,23 +1,25 @@
 #!/usr/bin/env node
+
 'use strict';
 var Request = require('request');
 var Newman = require('newman');
 var Fs = require('fs');
+var program = require('commander');
+
+var globals = require('./globals');
+var globalsInstances = new globals();
 
 var apiKey = process.env.apiKey;
 var host = 'api.getpostman.com';
 
-var collectionID = process.argv[2];
-var environmentID = process.argv[3];
-
 var tempDir = './temp';
 var resultsDir = './results';
 
-if (!Fs.existsSync(tempDir)){
-    Fs.mkdirSync(tempDir);
+if (!Fs.existsSync(tempDir)) {
+  Fs.mkdirSync(tempDir);
 }
-if (!Fs.existsSync(resultsDir)){
-    Fs.mkdirSync(resultsDir);
+if (!Fs.existsSync(resultsDir)) {
+  Fs.mkdirSync(resultsDir);
 }
 
 var options = {
@@ -30,11 +32,9 @@ var options = {
 
 function getObject(id, type) {
   return new Promise(function (fulfill, reject) {
-    //console.log('get ' +  type + ' with ID: ' + id);
-    Request('/' + type +'s/' + id, options, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
+    Request('/' + type + 's/' + id, options, function (error, response, body) {
+      if (!error && response.statusCode === 200) {
         var object = JSON.parse(body)[type];
-        console.log('got ' +  type + ' with ID: ' + id);
         fulfill(object);
       } else {
         console.log(error);
@@ -43,21 +43,6 @@ function getObject(id, type) {
     });
   });
 }
-
-Promise.all([getObject(environmentID, 'environment'), getObject(collectionID, 'collection')])
-  .then(function (results) {
-    var collection = results[1];
-    var environment = results[0];
-
-    console.log('environment name: ' + environment.name);
-    console.log('collection name: ' + collection.info.name);
-
-    console.log('start test');
-    test(collection, environment);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
 
 function test(collection, environment) {
   var newmanOptions = {
@@ -80,7 +65,7 @@ function test(collection, environment) {
     //noColor: false, //Disable colored output
     //noTestSymbols: false, //Disable symbols in test output and use PASS|FAIL instead
     //pretty: true, //(Use with -i) Enable pretty-print while saving imported collections, environments, and globals
-    outputFileVerbose: tempDir + '/' +'newman.log'
+    outputFileVerbose: tempDir + '/' + 'newman.log'
   }
 
   // Optional Callback function which will be executed once Newman is done executing all its tasks.
@@ -88,6 +73,37 @@ function test(collection, environment) {
 }
 
 function newman_finished_callback(exitCode) {
-  console.log('Newman finished with code '+exitCode);
+  console.log('Newman finished with code ' + exitCode);
   process.exit(exitCode)
 }
+
+function main() {
+  program
+    .option('-c, --collection [uid]', 'Specify a Postman collection UID')
+    .option('-e, --environment [id]', 'Specify a Postman environment ID')
+    .on('--help', function () {
+      globalsInstances.printHelp();
+    })
+    .parse(process.argv);
+
+  if (!program.environment || !program.collection) {
+    program.help();
+  } else {
+    Promise.all([getObject(program.environment, 'environment'), getObject(program.collection, 'collection')])
+      .then(function (results) {
+        var collection = results[1];
+        var environment = results[0];
+
+        console.log('environment name: ' + environment.name);
+        console.log('collection name: ' + collection.info.name);
+
+        console.log('start test');
+        test(collection, environment);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+}
+
+main();
