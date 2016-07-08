@@ -75,7 +75,7 @@ function test(collection, environment) {
     insecure: false, //Disable strict ssl
     asLibrary: true, // this makes sure the exit code is returned as an argument to the callback function
     stopOnError: false, //Stops the runner when a test case fails
-    exitCode: false, //Continue running tests even after a failure, but exit with code=1
+    exitCode: true, //Continue running tests even after a failure, but exit with code=1
     //noSummary: true, //Does not show the summary for each iteration
     //noColor: false, //Disable colored output
     //noTestSymbols: false, //Disable symbols in test output and use PASS|FAIL instead
@@ -84,9 +84,10 @@ function test(collection, environment) {
   }
 
   // Optional Callback function which will be executed once Newman is done executing all its tasks.
-  Newman.execute(collection, newmanOptions, quit());
+  Newman.execute(collection, newmanOptions, newman_finished_callback);
 }
 
-function quit() {
-  console.log('quited');
+function newman_finished_callback(exitCode) {
+  console.log('Newman finished with code '+exitCode);
+  process.exit(exitCode)
 }
