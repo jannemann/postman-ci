@@ -4,7 +4,7 @@ node.js cli tool to integrate postman and newman with your favorite CI
 
 ## Setup
 
-npm install postman-ci
+npm install -g postman-ci
 
 ## Run (in bash)
 
