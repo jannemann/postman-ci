@@ -4,7 +4,7 @@
 var Request = require('request');
 
 var apiKey = process.env.apiKey;
-var host = 'api.getpostman.com'
+var host = 'api.getpostman.com';
 
 var options = {
   baseUrl: 'https://' + host,
@@ -18,7 +18,7 @@ function getObjectIDs(type) {
   return new Promise(function (fulfill, reject) {
     Request('/' + type +'s', options, function (error, response, body) {
       var IDs = [];
-      if (!error && response.statusCode == 200) {
+      if (!error && response.statusCode === 200) {
         JSON.parse(body)[type + 's'].forEach(function (entry) {
             IDs.push(entry.uid);
         });
@@ -33,7 +33,7 @@ function getObject(id, type) {
   return new Promise(function (fulfill, reject) {
     //console.log('get ' +  type + ' with ID: ' + id);
     Request('/' + type +'s/' + id, options, function (error, response, body) {
-      if (!error && response.statusCode == 200) {
+      if (!error && response.statusCode === 200) {
         var object = JSON.parse(body)[type];
         //console.log('got ' +  type + ' with ID');
         //console.log(object);
@@ -79,25 +79,26 @@ function getList(type) {
   });
 }
 
-Promise.all([getList('environment'), getList('collection')])
-  .then(function (results) {
-    var environments = results[0];
-    var collections = results[1];
+function main() {
+  Promise.all([getList('environment'), getList('collection')])
+    .then(function (results) {
+      var environments = results[0];
+      var collections = results[1];
 
-    console.log('environments: ' + environments.length);
-    environments.forEach(function (result){
-      console.log(result.id + "|" + result.name);
+      console.log('environments: ' + environments.length);
+      environments.forEach(function (result){
+        console.log(result.id + "|" + result.name);
+      });
+
+      console.log('collections: ' + collections.length);
+      collections.forEach(function (result){
+        console.log(result.info.uid + '|' + result.info.name);
+      });
+
+    })
+    .catch(function (error) {
+      console.log('error: ' + error);
     });
+}
 
-    console.log('collections: ' + collections.length);
-    collections.forEach(function (result){
-      console.log(result.info.uid + '|' + result.info.name);
-    });
-
-    //console.log(collections[0]);
-    //console.log('start test');
-
-  })
-  .catch(function (error) {
-    console.log('error: ' + error);
-  });
+main();
