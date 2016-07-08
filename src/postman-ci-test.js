@@ -38,6 +38,7 @@ function getObject(id, type) {
         fulfill(object);
       } else {
         console.log(error);
+        console.log('Failed to download ' + type + ' with (U)ID: ' + id);
         reject(error);
       }
     });
@@ -52,8 +53,8 @@ function test(collection, environment) {
     //dataFile: data.csv, //Specify a data file to use either json or csv
     //exportEnvironment //Specify an output file to dump the Postman environment before exiting
     //exportGlobals  //Specify an output file to dump Globals before exiting
-    delay: 100, //Specify a delay (in ms) between requests
-    requestTimeout: 5000, //Specify a request timeout (in ms) for a request (Defaults to 15000 if not set)
+    delay: 500, //Specify a delay (in ms) between requests
+    requestTimeout: 15000, //Specify a request timeout (in ms) for a request (Defaults to 15000 if not set)
     iterationCount: 1, // define the number of times the runner should run
     testReportFile: resultsDir + '/' + collection.info.name + '_test.xml', // the file to export to
     responseHandler: "TestResponseHandler", // the response handler to use
@@ -65,7 +66,7 @@ function test(collection, environment) {
     //noColor: false, //Disable colored output
     //noTestSymbols: false, //Disable symbols in test output and use PASS|FAIL instead
     //pretty: true, //(Use with -i) Enable pretty-print while saving imported collections, environments, and globals
-    outputFileVerbose: tempDir + '/' + 'newman.log'
+    //outputFileVerbose: tempDir + '/' + 'newman.log'
   }
 
   // Optional Callback function which will be executed once Newman is done executing all its tasks.
@@ -74,7 +75,7 @@ function test(collection, environment) {
 
 function newman_finished_callback(exitCode) {
   console.log('Newman finished with code ' + exitCode);
-  process.exit(exitCode)
+  process.exit(exitCode);
 }
 
 function main() {
@@ -102,6 +103,8 @@ function main() {
       })
       .catch(function (error) {
         console.log(error);
+        console.log("Failed to fetch testing specs");
+        process.exit(1);
       });
   }
 }
