@@ -58,7 +58,7 @@ function execute(collection, environment, exportEnvironment) {
   //global: //Specify a Postman globals file as JSON
   //dataFile: data.csv, //Specify a data file to use either json or csv
   newmanOptions.envJson = environment; // environment file (in parsed json format)
-  newmanOptions.testReportFile = resultsDir + '/' + collection.info.name + '_test.xml'; // the file to export to
+  newmanOptions.testReportFile = resultsDir + '/' + collection.info.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() + '_test.xml'; // the file to export to
   if (exportEnvironment) {
     newmanOptions.exportEnvironmentFile = tempDir + '/' + 'loggedInEnvironment.json'; //Specify an output file to dump the Postman environment before exiting
   }
